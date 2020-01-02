@@ -1,0 +1,95 @@
+<!DOCTYPE HTML >
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <link href="/blitzer/jquery-ui-1.9.1.custom.min.css" rel="stylesheet">
+    <script src="/jquery-1.7.1.min.js"></script>
+    <script src="/jquery-ui-1.9.1.custom.min.js"></script>
+    <script src="/jquery.cookie.js"></script>
+    <script src="/cvi_busy_lib.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/refresh_content.css" media="screen" />
+    <title>chinacache内容管理</title>
+    <link rel="shortcut icon" href="/ico.ico">
+</head>
+
+<body>  
+<div id="warp">
+	<section id="content" style="width: 1000px;min-height:900px;text-align: center;margin-left:10%;background-color:white;">
+	    <section id="top-3">
+	    	<div style="padding-left: 5px;float:left;">
+	    		<img style="height:57px" src="/cc-logo.png">
+	    	</div>
+	    	<div style="float:left;color: black;float: left;font-size: 18px;font-weight: bold;padding-top: 14px;">
+	    	内容管理
+	    	</div>
+	    </section>
+	    <section style="float:right;padding-right:40px;padding-top:20px;">
+			<a class="helpUnderline" href="https://portal.chinacache.com/help/profile/content-profile.html" target="_blank">
+			<img src="/help_icon.gif"><span>帮助</span>
+			</a>
+		</section>
+	    <section style="width:1000px;padding-top:15px;background-color:white;">
+	        <table style="width:1000px;">
+	            <tr>
+	                <td colspan="2" >
+	                    <label>username : </label><input id="username" name="username" type="text" class="input_text"/>
+	                    <label>password : </label><input id="password" name="password" type="password" class="input_text"/>
+	                	<input type="checkbox" name="remember" id="remember" class="custom" checked="true" />
+	            		<label for="remember">记住密码</label>
+	                </td>
+	            </tr>
+	        </table>
+	        <form>
+				<div class="titlebox">
+					<div class="titleboxinside">
+						URL刷新
+					</div>
+				</div>
+				<div class="graphbox">
+					<div class="graphboxinside">
+						<textarea id="urls" name="urls" style="width: 99%;resize: none;" rows="7"></textarea>
+						<div class="description">
+							注意：请输入需要刷新的URL，每个<font color="#FF0000">URL</font>一行，必须以<font color="#FF0000">http://</font>或者<font color="#FF0000">https://</font>开头。<br>提交后5－10分钟生效。<br>例如：http://www.chinacache.com/news/test.html
+						</div>
+					</div>
+				</div>
+				<br>
+				
+				<div class="titlebox">
+					<div class="titleboxinside">
+						目录刷新
+					</div>
+				</div>
+				<div class="graphbox">
+					<div class="graphboxinside">
+						<textarea id="dirs" name="dirs" style="width: 99%;resize: none;" rows="7"></textarea>
+						<div class="description">
+							注意：刷新目录请以<font color="#FF0000">/</font>结尾，每个<font color="#FF0000">目录</font>一行，必须以<font color="#FF0000">http://</font>或者<font color="#FF0000">https://</font>开头。<br>提交后5－10分钟生效。如果目录下URL数量很大，建议不要使用目录刷新。<br>例如：http://www.chinacache.com/news/
+						</div>
+					</div>
+				</div>
+				<br/>
+				<br/>
+				<div style="text-align: center;">
+					<a id="refresh" class="ui-state-default ui-corner-all" style="font-size:14pt;cursor:pointer">&nbsp;&nbsp;提交&nbsp;&nbsp;</a>
+				</div>
+				<br/>
+				<br/>
+			</form>		
+	    </section>		    	
+	</section>
+	<section style="width: 1000px;text-align: center;margin-left:10%;background-color:white;padding-top:5px;">
+		<div id="footer" class="footer">				
+			Copyright © 北京蓝汛通信技术有限责任公司
+		</div>
+	</section>
+</div>
+<!-- ui-dialog -->
+<div id="refresh-msg-dialog"  title="提示信息" >
+	<div id="refresh-msg" style="font-size:12pt;text-align:center;resize: none;padding-top:5%;"></div>
+</div>
+
+<script src="/js/refresh_content.js"></script>
+
+</body>
+</html>

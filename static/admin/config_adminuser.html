@@ -1,0 +1,78 @@
+<!DOCTYPE HTML >
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>admin权限管理界面</title>
+    <link rel="shortcut icon" href="/ico.ico">
+    <script type="text/javascript" src="/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/js/config_admin_user.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />
+    <style type="text/css">
+    section#top-3{
+        text-align:center;
+        padding-bottom: 10px;
+        color: red;
+        width:100%;
+        height:5%;
+        font-size: 25pt;
+        text-shadow: 5px 5px 3px gray;
+        padding-top: 20px;
+    }
+    </style>
+</head>
+<body>
+    <div id="warp">
+        <section style="width: 100%;height:600px;background-color:#F4F4ED;text-align: center;">
+            <section id="top-3">
+                刷新系统-权限管理
+            </section>
+            <div style="float:right;"><a href="/index.html">返回首页</a></div>
+            <section>
+                <table id="add_user">
+                    <label>用户ID:</label>&nbsp;
+                    <input type="text" style="width:260px;" id="userID"></input>&nbsp;
+                    <label>用户权限:</label>&nbsp;
+                    <select id="right">
+					  <option value ="admin">admin</option>
+					  <option value ="operator">operator</option>
+					</select>&nbsp;
+					<input type="button" value=" 添加 or 修改 " id="add_user"/>
+                </table>
+                <table id="mytable" align="center">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Authority</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+ 
+                    </tbody>
+                </table>
+            </section>
+        </section>
+
+        <footer id="footer" style="width: 100%;background-color:#F4F4ED;text-align: center;">
+            <hr />
+            COPYRIGHT! Powered by COOLER
+        </footer>
+    </div>
+</body>
+<script type="text/javascript">
+    $("#add_user").click(function(){
+        var userID = $('#userID').val().trim();
+        var right =  $('#right').val().trim();
+        $.ajax({
+            type: "GET",
+            url: "/config_user",
+            data:{"userID":userID,"right":right},
+            success: function(data){
+                alert(data);
+                location.href="/config_adminuser.html";
+            }
+        });
+    });
+</script>
+</html>

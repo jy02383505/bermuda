@@ -1,0 +1,280 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<link href="{{ url_for('static', filename='css/jquery-ui.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.fancybox-1.3.4.css') }}" media="screen" />
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery-ui-timepicker-addon.css') }}" />
+
+    <div class="text-center">
+         <form class="form-inline" action="/cert_only_domain" method="post" id="queryForm">
+            <label class="control-label"> <strong>用户名:</strong>
+            <input type="text" class="input-small" name="username" value="{{ args.username }}">
+            </label>
+            <label class="control-label"> <strong>频道名:</strong>
+                <input class="input-large" type="text" name="domain" value="{{ args.domain }}">
+            </label>
+{#            <label class="control-label"> <strong>状态:</strong>#}
+{#                <input class="input-large" type="text" name="status" value="{{ args.status }}">#}
+{#            </label>#}
+                <label class="control-label"> <strong>状态: </strong>
+             <select name="Is_encry" class="input-medium">
+                        <option>ALL</option>
+                        <option value=True
+                        {% if args.Is_encry == "True" %}
+                          selected="selected"
+                         {% endif %}
+                        >已加密</option>
+                        <option value=False
+                          {% if args.Is_encry == "False" %}
+                          selected="selected"
+                         {% endif %}
+                        >未加密</option>
+
+             </select>
+                </label>
+            <button type="button" class="btn btn-primary " onclick="to_query()">查询</button>
+         </form>
+    </div>
+
+        <div class="jumbotron">
+              <table class="table table-striped">
+                  <tr>
+                      <th style="width: 100px;"><center>用户名</center></th>
+                      <th style="width: 100px;"><center>频道名</center></th>
+                      <th style="width: 150px;"><center>证书别名</center></th>
+                      <th style="width: 130px;" ><center>证书名</center></th>
+                      <th style="width: 120px;"><center>当前加密状态</center></th>
+                      <th style="width: 120px;"><center>是否进行加密</center></th>
+                      </tr>
+                    {%for t in tasks %}
+                    <tr>
+                      <td><center>{{t.username}}</center> </td>
+                      <td><center>{{t.domain}}</center> </td>
+                      <td><center>{{t.cert_alias}}</center> </td>
+                      <td><center>{{t.save_name}}</center> </td>
+
+                      {% if t.Is_encry == true %}
+                      <td><center>已加密</center> </td>
+                      {% else %}
+                      <td><center>未加密</center> </td>
+                      {% endif %}
+
+                      {% if t.Is_encry  == true %}
+                        <td><center> <button Is_encry="{{t.Is_encry}}" cert_id="{{t.cert_id}}" user_name ="{{t.username}}" class = "send_fc btn btn-primary">解密证书</button> </center></td>
+                      {% else  %}
+                        <td><center> <button Is_encry="{{t.Is_encry}}" cert_id="{{t.cert_id}}" user_name ="{{t.username}}" class = "send_fc btn btn-warning">进行加密</button> </center></td>
+                      {% endif %}
+
+
+                    </tr>
+                    {% endfor %}
+              </table>
+        </div>
+
+
+        {% if args.totalpage >1 %}
+        <div class="pagination">
+              <ul>
+                  <li class="disabled"><a href="/cert_only_domain">&laquo;</a></li>
+                  {%for p in range(args.totalpage) %}
+                  <li ><a href="javascript:submitFrom({{p}});" {% if args.curpage == p %} class="btn" {% endif %} >{{ p + 1 }}</a></li>
+                 {% endfor %}
+              </ul>
+         </div>
+         {% endif %}
+
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.fancybox-1.3.4.pack.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui-timepicker-addon.js') }}"></script>
+
+    <script type="text/javascript">
+       $(document).on("click", '.send_fc', function(){
+           var cert_id = this.getAttribute("cert_id");
+           var user_name = this.getAttribute("user_name");
+           var Is_encry = this.getAttribute("Is_encry");
+           var Ele_this = this;
+           var data = {};
+           data["cert_id"] = cert_id;
+           data["username"] = user_name;
+           data["Is_encry"] = Is_encry;
+           $.ajax({
+             url: "/cert_encrypt_send",
+             type: "POST",
+             contentType: "application/json; charset=utf-8",
+             data: JSON.stringify(data),
+             success: function(data, code){
+                 var cert_id = Ele_this.getAttribute("cert_id");
+                 var user_name = Ele_this.getAttribute("user_name");
+                 var Is_encry = Ele_this.getAttribute("Is_encry");
+                 console.log(code);
+                 console.log(Ele_this);
+                 if ($.parseJSON(data).status == true){
+                     console.log(code);
+                 console.log(Ele_this);
+                 if (Is_encry == "True"){
+                     Ele_this.parentElement.parentElement.parentElement.children[4].innerHTML ="<center>未加密</center>";
+                     Ele_this.parentElement.parentElement.parentElement.lastElementChild.lastElementChild.innerHTML=
+                         "<button Is_encry=False cert_id=\""+cert_id+"\" user_name =\""+user_name+"\" class = \"send_fc btn btn-warning\">进行加密</button> </center>"
+                     //location.href = '/preload_queue_channel'
+                 }else {
+                     Ele_this.parentElement.parentElement.parentElement.children[4].innerHTML ="<center>已加密</center>";
+                     Ele_this.parentElement.parentElement.parentElement.lastElementChild.lastElementChild.innerHTML=
+                         "<button Is_encry=True cert_id=\""+cert_id+"\" user_name =\""+user_name+"\" class = \"send_fc btn btn-primary\">解密证书</button> </center>"
+                 }
+
+                 }else {
+                     alert(data)
+                 }
+
+            },
+          })
+        });
+{#       $('.send_fc').click(function(){#}
+{#           var cert_id = this.getAttribute("cert_id");#}
+{#           var user_name = this.getAttribute("user_name");#}
+{#           var Is_encry = this.getAttribute("Is_encry");#}
+{#           var Ele_this = this;#}
+{#           var data = {};#}
+{#           data["cert_id"] = cert_id;#}
+{#           data["username"] = user_name;#}
+{#           data["Is_encry"] = Is_encry;#}
+{#           $.ajax({#}
+{#             url: "/cert_encrypt_send",#}
+{#             type: "POST",#}
+{#             contentType: "application/json; charset=utf-8",#}
+{#             data: JSON.stringify(data),#}
+{#             success: function(data, code){#}
+{#                 var cert_id = Ele_this.getAttribute("cert_id");#}
+{#                 var user_name = Ele_this.getAttribute("user_name");#}
+{#                 var Is_encry = Ele_this.getAttribute("Is_encry");#}
+{#                 console.log(code);#}
+{#                 console.log(Ele_this);#}
+{#                 if ($.parseJSON(data).status == true){#}
+{#                     console.log(code);#}
+{#                 console.log(Ele_this);#}
+{#                 if (Is_encry == "True"){#}
+{#                     Ele_this.parentElement.parentElement.parentElement.children[4].innerHTML ="<center>未加密</center>";#}
+{#                     Ele_this.parentElement.parentElement.parentElement.lastElementChild.lastElementChild.innerHTML=#}
+{#                         "<button Is_encry=False cert_id=\""+cert_id+"\" user_name =\""+user_name+"\" class = \"send_fc btn btn-warning\">进行加密</button> </center>"#}
+{#                     //location.href = '/preload_queue_channel'#}
+{#                 }else {#}
+{#                     Ele_this.parentElement.parentElement.parentElement.children[4].innerHTML ="<center>已加密</center>";#}
+{#                     Ele_this.parentElement.parentElement.parentElement.lastElementChild.lastElementChild.innerHTML=#}
+{#                         "<button Is_encry=True cert_id=\""+cert_id+"\" user_name =\""+user_name+"\" class = \"send_fc btn btn-primary\">解密证书</button> </center>"#}
+{#                 }#}
+{##}
+{#                 }else {#}
+{#                     alert(data)#}
+{#                 }#}
+{##}
+{#            },#}
+{#          })#}
+{#        })#}
+
+       function to_query(){
+           $('#queryForm').attr('action', '/cert_only_domain')
+           $('#queryForm').submit()
+       }
+
+       $(document).ready(function(){
+           $('#datepickera_start').datetimepicker({
+	       timeFormat: "HH",
+               dateFormat: "yy-mm-dd"
+            })
+           $('#datepickera_end').datetimepicker({
+               timeFormat: "HH",
+               dateFormat: "yy-mm-dd"
+            });
+
+	   {% if args.query_type == 'normal_query' %}
+	       $('.exact_query').hide();
+	       $('#normal_query').show();
+	   {% else %}
+	       $('#normal_query').hide();
+	       $('.exact_query').show();
+	   {% endif %}
+
+           $('#query_type').change(function(){
+	       var _type = $('#query_type').val()
+               if (_type == 'normal_query'){
+		   $('.exact_query').hide();
+		   $('#normal_query').show();
+               }else{
+		   $('#normal_query').hide();
+		   $('.exact_query').show();
+               }
+          })
+       })
+
+       function submitFrom(curpage){
+          var f = document.getElementById("queryForm");
+          var input = document.createElement("input");
+          input.setAttribute("type","hidden");
+          input.setAttribute("value",curpage);
+          input.setAttribute("name","curpage");
+          f.appendChild(input);
+          f.action = '/cert_only_domain';
+          f.submit();
+        };
+
+        $(function() {
+          $( "#datepickera" ).datepicker();
+          $( "#datepickera" ).datepicker( 'setDate' , new Date());
+          {% if args.date %}
+            $( "#datepickera" ).val("{{args.date}}")
+          {%endif%}
+        });
+
+        $(document).ready(function() {
+        $("a[rel=device]").fancybox({
+        'width': "768",
+        'height': "1024",
+        'autoScale': false,
+        'centerOnScroll': false,
+        'padding': 28,
+        'margin': 48,
+        'scrolling': "no",
+        'overlayOpacity': 0.4,
+        'overlayColor': "#979b8f",
+        'transitionIn': "elastic",
+        'transitionOut': "elastic",
+        'enableEscapeButton': true,
+        'showNavArrows':false
+        });
+        $("a[rel=retry]").fancybox({
+        'width': "768",
+        'height': "1024",
+        'autoScale': false,
+        'centerOnScroll': false,
+        'padding': 28,
+        'margin': 48,
+        'scrolling': "no",
+        'overlayOpacity': 0.4,
+        'overlayColor': "#979b8f",
+        'transitionIn': "elastic",
+        'transitionOut': "elastic",
+        'enableEscapeButton': true,
+        'showNavArrows':false
+        });
+
+        $("a[rel=retryDevice]").fancybox({
+        'width': "1024",
+        'height': "1024",
+        'autoScale': false,
+        'centerOnScroll': false,
+        'padding': 28,
+        'margin': 48,
+        'scrolling': "no",
+        'overlayOpacity': 0.4,
+        'overlayColor': "#979b8f",
+        'transitionIn': "elastic",
+        'transitionOut': "elastic",
+        'enableEscapeButton': true,
+        'showNavArrows':false
+        });
+      });
+  </script>
+
+{% endblock %}

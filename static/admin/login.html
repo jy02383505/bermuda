@@ -1,0 +1,116 @@
+<!DOCTYPE HTML >
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>登录页面</title>
+    <link rel="shortcut icon" href="/ico.ico">
+    <script type="text/javascript" src="/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/js/bermuda.js"></script>
+</head>
+<style type="text/css">
+    section#top-3{
+        text-align:center;
+        padding-bottom: 10px;
+        color: red;
+        width:100%;
+        height:5%;
+        font-size: 25pt;
+        text-shadow: 5px 5px 3px gray;
+        padding-top: 20px;
+    }
+    fieldset{
+        width: 416px;
+        border: none;
+        background-color: #ddd;
+        font-size: 14px;
+    }
+    fieldset>ol{
+        list-style: none;
+        padding: 0;
+        margin: 2px;
+    }
+    fieldset>ol>li{
+        margin: 0 0 9px 0;
+        padding: 0;
+
+    }
+
+    input{
+        width: 60%;
+        height: 30px;
+        font-size: 12pt;
+        font-style:italic;
+        background-color: #fff;
+        border: 1px solid #bbb;
+    }
+    input[type="submit"]{
+        width: 80px;
+        padding: 0;
+        background-color: #bbb;
+        cursor: pointer;
+    }
+    input,fieldset{
+        border-radius:5px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+    }
+    form{
+        padding-left: 33%;
+        padding-top: 5%;
+    }
+    label{
+        padding-right: 35px;
+    }
+</style>
+<body>
+    <div id="warp">
+        <section style="width: 100%;height:600px;background-color:#F4F4ED;text-align: center;">
+            <section id="top-3">
+                刷新系统
+            </section>
+            <section>
+                <form id="login_form"  method="POST">
+                    <fieldset id="login">
+                        <ol>
+                            <li>
+                                <label>username</label>
+                                <input id="username" name="username" type="email" value="peng.zhou@chinacache.com"/>
+                            </li>
+                            <li>
+                                <label>password</label>
+                                <input id="password" name="password" type="password" value="" />
+                            </li>
+                            <li style="text-align: right; padding-right: 5px;">
+                                <input id="login" type="submit" value="login"/>
+                            </li>
+                        </ol>
+                    </fieldset>
+                </form>
+            </section>
+        </section>
+
+        <footer id="footer" style="width: 100%;background-color:#F4F4ED;text-align: center;">
+            <hr />
+            COPYRIGHT! Powered by COOLER
+        </footer>
+    </div>
+</body>
+<script type="text/javascript">
+    if (!checkBrowser()){
+        var text = "<h1 style='color:white;'>请选用谷歌、火狐、opera或ie9以上版本浏览器！</h1>" ;
+        $("#warp").html(text);
+        $("body").css({"background-color":"#555","text-align":"center"});
+    }else{
+        initFormAction();
+    }
+    function initFormAction(){
+        $.ajax({
+            type: "GET",
+            url: "/getSSOClientName",
+            success: function(data){
+                $("#login_form").attr("action","https://sso.chinacache.com/?clientName="+data+"&");
+            }
+        });
+    }
+</script>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML >
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>刷新系统-管理</title>
+    <link rel="shortcut icon" href="/ico.ico">
+    <script type="text/javascript" src="/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="/FusionCharts.js"></script>
+    <script type="text/javascript" src="/FusionCharts.jQueryPlugin.js"></script>
+    <script type="text/javascript" src="/pagenav1.1.cn.js"></script>
+    <script type="text/javascript" src="/cvi_busy_lib.js"></script>
+    <script type="text/javascript" src="/jquery.tablesorter.js"></script>
+    <script type="text/javascript" src="/datepicker.js"></script>
+    <script type="text/javascript" src="/jquery.dateFormat-1.0.js"></script>
+    <script type="text/javascript" src="/js/bermuda.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script type="text/javascript" src="/js/refresh_detail.js"></script>
+    <script type="text/javascript" src="/js/request_way.js"></script>
+    <script type="text/javascript" src="/js/error_task.js"></script>
+    <script type="text/javascript" src="/js/clear_blacklist.js"></script>
+    <script type="text/javascript" src="/js/overloads.js"></script>
+    <script type="text/javascript" src="/js/timeouts.js"></script>
+    <script type="text/javascript" src="/js/rewrite.js"></script>
+    <script type="text/javascript" src="/js/regex_config.js"></script>
+    <script type="text/javascript" src="/js/channelignore.js"></script>
+    <script type="text/javascript" src="/js/key_customers_monitor.js"></script>
+    <script type="text/javascript" src="/js/suspend.js"></script>
+    <script type="text/javascript" src="/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+    <script type="text/javascript" src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+    <link rel="stylesheet" type="text/css" href="/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/datepicker.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" media="screen" />
+</head>
+<style type="text/css">
+
+    .action{
+        cursor: pointer;
+        color: red;
+    }
+    .start{
+        color: green;
+    }
+    .stop{
+        color: red;
+    }
+    
+</style>
+<body>
+    <div id="warp"> 
+        <div id="topContent">
+             <h1> 刷 新 系 统 首 页</h1>  
+            <div id="userInfo"></div>
+        	  <div id="menu">
+                    <div id="navigate">
+                     
+                    </div>
+              </div>
+            <hr/>
+        </div>
+        <div id="content">
+
+        </div>
+        <footer id="footer" style="width: 100%;background-color:#F4F4ED;text-align: center;">
+            <hr />
+            COPYRIGHT! Powered by COOLER
+        </footer>
+    </div>
+  <script type="text/javascript">
+    if (!checkBrowser()){
+        var text = "<div style='width:100%;'><h1 style='color:white;padding-top:20px;'>请选用谷歌、火狐、opera或ie9以上版本浏览器！</h1></div>" ;
+        $("#warp").html(text);
+        $("body").css({"background-color":"#555","text-align":"center"});
+    }else{
+
+        $.ajax({
+            type: "GET",
+            url: "/getUserInfo",
+            statusCode: {
+                403: function() {
+                        $.ajax({
+                            type: "GET",
+                            url: "/getSSOClientName",
+                            success: function(data){
+                                location.href="https://sso.chinacache.com/queryByCookie?clientName="+data;
+                            }
+                        });
+                },
+                500: function() {
+                    location.href="/login.html";
+                },
+                502: function() {
+                    location.href="/login.html";
+                }
+            },
+            success: function(data){
+                var account = data['userInfo']['account'].split('@')[0];
+                $("#userInfo").html("当前登录帐号："+ account);
+                $("#userInfo").attr("name",data['userInfo']['roles']);
+                initTopMenu();
+                if(account == "peng.zhou" || account == "li.chang" || account == "caiquan.wen"){
+                    initIndexHtml();
+                }else{
+                    initRefreshDetailContent();
+                }
+                $("a[name='top-a']").click(changeNavigate);
+                }
+            }
+        );
+    }
+  </script>
+</body>
+</html>

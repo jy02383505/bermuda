@@ -1,0 +1,5 @@
+*/5 * * * * /Application/bermuda/monitor.sh >>/Application/bermuda/logs/monitor.log 2>&1
+*/1 * * * * /Application/bermuda/bin/retry.sh > /dev/null 2>&1
+*/1 * * * * /Application/bermuda/bin/router.sh > /dev/null 2>&1
+*/5 * * * * /Application/bermuda/monitor_celery.sh >>/Application/bermuda/logs/monitor_celery.log 2>&1
+0 1 * * * /Application/bermuda/clear_logs.sh

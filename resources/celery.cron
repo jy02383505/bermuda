@@ -1,0 +1,1 @@
+*/5 * * * * /Application/bermuda/monitor_celery.sh >>/Application/bermuda/logs/monitor_celery.log 2>&1
