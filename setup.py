@@ -91,7 +91,7 @@ setup(
         'nose==1.3.4',
         'pyOpenSSL==16.2.0',
         'pycrypto==2.6.1',
-        'gunicorn==19.7.1',
+        'gunicorn==23.0.0',
         'apscheduler==3.5.3',
         'rpyc==4.0.2',
         'ecdsa==0.13'
