@@ -86,7 +86,7 @@ setup(
         'eventlet==0.9.17',
         'geventhttpclient==1.0a',
         'gevent==1.1.1',
-        'requests==2.6.0',
+        'requests==2.32.4',
         'python-etcd==0.4.3',
         'nose==1.3.4',
         'pyOpenSSL==16.2.0',
