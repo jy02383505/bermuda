@@ -94,7 +94,7 @@ setup(
         'gunicorn==19.7.1',
         'apscheduler==3.5.3',
         'rpyc==4.0.2',
-        'ecdsa==0.13'
+        'ecdsa==0.19.1'
 
     ]
 )
