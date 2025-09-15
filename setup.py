@@ -83,7 +83,7 @@ setup(
         # 'pymongo==3.0.2',
         # 'paramiko==1.15.2',
         'pika==0.9.14',
-        'eventlet==0.9.17',
+        'eventlet==0.40.3',
         'geventhttpclient==1.0a',
         'gevent==1.1.1',
         'requests==2.6.0',
