@@ -75,7 +75,7 @@ setup(
         'celery==3.1.23',
         'httplib2==0.9',
         'redis==2.6.2',
-        'flask==0.9',
+        'flask==3.1.3',
         'flask_principal==0.3.3',
         'flup==1.0.3.dev_20110405',
         # 'pymongo==3.7.1',
